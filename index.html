@@ -5,20 +5,26 @@
   </body>
 </html>
 <script>
+  const got = require("got");
+  
   function shorten(){
     var urlToShorten = document.getElementById("url").value;
     
-    var xhr = new XMLHttpRequest();
-    var url = "https://api.short.cm/links";
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var json = JSON.parse(xhr.responseText);
-          console.log(json);
-        }
+    const options = {
+      method: 'POST',
+      url: 'https://api.short.cm/links',
+      headers: {
+        authorization: 'mMhpIkm9nJaGX4kzvyOuPYRC83iTyIGg',
+      },
+      body: {
+        originalURL: urlToShorten,
+        domain: 'rbsurl.tk'
+      },
+      json: true
     };
-    var data = JSON.stringify({"domain":"rbsurl.tk","originalURL":urlToShorten});
-    xhr.send(data,headers={"authorization":"mMhpIkm9nJaGX4kzvyOuPYRC83iTyIGg"});
+
+    got("https://api.short.cm/links", options).then(response => {
+      console.log(response.body);
+    });
   }
 </script>
