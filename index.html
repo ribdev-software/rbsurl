@@ -1,47 +1,33 @@
 <html>
   <body>
-    <input id="url" type="text">
-    <button onclick="shorten">Shorten</button>
-    <p>Your link is:</p>
+    <h1 class="message">Shorten rbsurl.tk link</h1>
+    <div>
+      <input name="text" type="url" value  id="linkinput" placeholder="Paste a URL to shorten" >
+      <input type="submit" id="myinput" value="Shorten">
+    </div>
     <p id="message"></p>
-    <button onclick="copyShort();">Copy</button>
+ <script>
+document.getElementById("myinput").onclick = function() {
+  var link = document.getElementById("linkinput").value;
+  var data = {
+    "domain":"rbsurl.tk",
+    "originalURL": link,
+    "allowDuplicates":false }; 
+ fetch('https://api.short.cm/links/public', {
+    method: 'post',
+    headers: {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+      'authorization': 'mMhpIkm9nJaGX4kzvyOuPYRC83iTyIGg'
+    },
+    body: JSON.stringify(data)
+  }) .then(function(response) {
+        return response.json();
+    }) 
+    .then(function(data){ 
+    document.getElementById("message").innerHTML = "Your short link is " + data.shortURL })
+    document.getElementById("linkinput").value='';
+ }
+    </script>
   </body>
 </html>
-<script>
-  function shorten(){
-    var link = document.getElementByid("shorten");
-    var data = {
-      "domain": "rbsurl.tk",
-      "originalURL": link.value,
-      "allowDuplicates": false
-    };
-    fetch("https://api.short.cm/links/public",{
-      method: "post",
-      headers: {
-        "accept": "applications/json",
-        "Content-Type": "application/json",
-        "authorization": atob("bU1ocElrbTluSmFHWDRrenZ5T3VQWVJDODNpVHlJR2c=")
-      },
-      body: JSON.stringify(data)
-    }).then(function(response){
-      return response.json();
-    }).then(function(data){
-      document.getElementById("message").innerHTML = data.shortUrl;
-    });
-    link.value = "";
-  }
-  
-  function copyShort(){
-    if (document.selection) {
-      var range = document.body.createTextRange();
-      range.moveToElementText(document.getElementById("message"));
-      range.select().createTextRange();
-      document.execCommand("copy");
-    } else if (window.getSelection) {
-      var range = document.createRange();
-      range.selectNode(document.getElementById("message"));
-      window.getSelection().addRange(range);
-      document.execCommand("copy");
-    }
-  }
-</script>
